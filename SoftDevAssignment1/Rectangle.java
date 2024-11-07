@@ -57,87 +57,8 @@ public class Rectangle extends AbstractShape implements CollisionDetector {
 
     public boolean intersect(Point s){
         //check if rectangle and point intersect
-
-        //find the top left bottom left top right bottom right
-        Point[] points = {this.bottom,this.left,this.right,this.top};
-
-        Point left1 = points[0];
-        Point left2 = null;
-        Point right1 = points[0];
-        Point right2 = null;
-
-        // Loop to find the two leftmost and two rightmost points
-        for (int i = 1; i < points.length; i++) {
-            Point p = points[i];
-
-            // Find two leftmost points
-            if (p.getX() < left1.getX()) {
-                left2 = left1;
-                left1 = p;
-            } else if (left2 == null || p.getX() < left2.getX()) {
-                left2 = p;
-            }
-
-            // Find two rightmost points
-            if (p.getX() > right1.getX()) {
-                right2 = right1;
-                right1 = p;
-            } else if (right2 == null || p.getX() > right2.getX()) {
-                right2 = p;
-            }
-        }
-
-        Point TopLeft;
-        Point TopRight;
-        Point BottomLeft;
-        Point BottomRight;
-
-        if (left1.getY() > left2.getY()) {
-            TopLeft = left1;  // Top-left
-            BottomLeft = left2;  // Bottom-left
-        } else {
-            TopLeft = left2;  // Top-left
-            BottomLeft = left1;  // Bottom-left
-        }
-
-        // Determine top-right and bottom-right
-        if (right1.getY() > right2.getY()) {
-            TopRight = right1;  // Top-right
-            BottomRight = right2;  // Bottom-right
-        } else {
-            TopRight = right2;  // Top-right
-            BottomRight = right1;  // Bottom-right
-        }
-
-        double TopLeftx = TopLeft.getX();
-        double TopLefty = TopLeft.getY();
-
-        double TopRightx = TopRight.getX();
-        double TopRighty = TopRight.getY();
-
-        double BottomLeftx = BottomLeft.getX();
-        double BottomLefty = BottomLeft.getY();
-
-        //make two vectors both from the corner point to another either to its left or right
-        double[] TopLeftTopRight = {TopRightx - TopLeftx,TopRighty - TopRightx};
-        double[] TopLeftBottomLeft = {BottomLeftx - TopLeftx,BottomLefty - TopRightx};
-
-        //get a vector from the corner point to the point we are working with
-        double[] TopLeftPoint = {s.getX() - TopLeftx, s.getY() - TopLefty};
-
-        //project the corner to point vector onto both the other vectors
-        double TLPontoTLTR = (TopLeftPoint[0] * TopLeftTopRight[0] + TopLeftPoint[1] * TopLeftTopRight[1]) / (TopLeftTopRight[0] * TopLeftTopRight[0] + TopLeftTopRight[1] * TopLeftTopRight[1]);
-        double TLPontoTLBL = (TopLeftPoint[0] * TopLeftBottomLeft[0] + TopLeftPoint[1] * TopLeftBottomLeft[1]) / (TopLeftBottomLeft[0] * TopLeftBottomLeft[0] + TopLeftBottomLeft[1] * TopLeftBottomLeft[1]);
-
-        //basically if the projection of the corner to vector onto the other vectors are between 0 and 1 it means
-        //the point is in the rectangle or on the line 
-        if ((TLPontoTLBL >= 0 && TLPontoTLBL <= 1) && (TLPontoTLTR >= 0 && TLPontoTLTR <= 1)){
-            return true;
-        }
-        return false;
+        return s.intersect(this);
     }
-
-
 
 
     public boolean intersect(LineSeg s){

@@ -1,5 +1,4 @@
 package SoftDevAssignment1;
-import java.lang.Math;
 
 public class LineSeg extends AbstractShape implements CollisionDetector {
     private Point begin;
@@ -7,6 +6,7 @@ public class LineSeg extends AbstractShape implements CollisionDetector {
 
     private static int numberOfInstances;
 
+    //default line segment is just 0,0 to 0,1
     public LineSeg(){
         super();
         numberOfInstances ++;
@@ -42,33 +42,7 @@ public class LineSeg extends AbstractShape implements CollisionDetector {
 
     public boolean intersect(Point s){
         //check if LineSeg and point intersect
-        Point p1 = this.end;
-        Point p2 = this.begin;
-
-        double y2 = p1.getY();
-        double y1 = p2.getY();
-
-        double x2 = p1.getX();
-        double x1 = p2.getX();
-
-        double y = s.getY();
-        double x = s.getX();
-
-        //vertical line!
-        if (x1 == x2) {
-            return x == x1 && (Math.min(y1, y2) <= y && y <= Math.max(y1, y2));
-        }
-
-        //get slope of line
-        double slope = (y2 - y1) / (x2 - x1);
-
-
-        //check if the point is on the line
-        if ((y - y1) == (slope * (x - x1))){
-            //make sure the point is in the bounds of the line points
-            return (Math.min(x1, x2) <= x && x <= Math.max(x1, x2)) && (Math.min(y1, y2) <= y && y <= Math.max(y1, y2));
-        }
-        return false;
+        return s.intersect(this);
     }
 
     public boolean intersect(LineSeg s){
@@ -109,6 +83,7 @@ public class LineSeg extends AbstractShape implements CollisionDetector {
             return false;
         }
 
+        //this is to see if they are parralel
         if (abDenominator == 0){
             if (s.intersect(l1p1) || s.intersect(l1p2)){
                 return true;
@@ -122,6 +97,8 @@ public class LineSeg extends AbstractShape implements CollisionDetector {
 
         double b = bNumerator / abDenominator;
 
+        //so if the a and b are between 0 and 1 it means the intersection point is on both the 
+        //lines meaning there is an intersection
         if ((a >= 0 && a <= 1) && (b >= 0 && b <= 1)){
             return true;
         }
@@ -129,126 +106,12 @@ public class LineSeg extends AbstractShape implements CollisionDetector {
     }
 
     public boolean intersect(Rectangle s){
-
-        //find the top left bottom left top right bottom right
-        Point[] points = {s.getBottom(),s.getLeft(),s.getRight(),s.getTop()};
-
-        Point left1 = points[0];
-        Point left2 = null;
-        Point right1 = points[0];
-        Point right2 = null;
-
-        // Loop to find the two leftmost and two rightmost points
-        for (int i = 1; i < points.length; i++) {
-            Point p = points[i];
-
-            // Find two leftmost points
-            if (p.getX() < left1.getX()) {
-                left2 = left1;
-                left1 = p;
-            } else if (left2 == null || p.getX() < left2.getX()) {
-                left2 = p;
-            }
-
-            // Find two rightmost points
-            if (p.getX() > right1.getX()) {
-                right2 = right1;
-                right1 = p;
-            } else if (right2 == null || p.getX() > right2.getX()) {
-                right2 = p;
-            }
-        }
-
-        Point TopLeft;
-        Point TopRight;
-        Point BottomLeft;
-        Point BottomRight;
-
-        if (left1.getY() > left2.getY()) {
-            TopLeft = left1;  // Top-left
-            BottomLeft = left2;  // Bottom-left
-        } else {
-            TopLeft = left2;  // Top-left
-            BottomLeft = left1;  // Bottom-left
-        }
-
-        // Determine top-right and bottom-right
-        if (right1.getY() > right2.getY()) {
-            TopRight = right1;  // Top-right
-            BottomRight = right2;  // Bottom-right
-        } else {
-            TopRight = right2;  // Top-right
-            BottomRight = right1;  // Bottom-right
-        }
-
-
-        //check if LineSeg and rectangle intersect
-        LineSeg leftLine = new LineSeg(TopLeft,BottomLeft);
-        leftLine.decrement();
-        LineSeg bottomLine = new LineSeg(BottomLeft,BottomRight);
-        bottomLine.decrement();
-        LineSeg rightLine = new LineSeg(BottomRight,TopRight);
-        rightLine.decrement();
-        LineSeg topLine = new LineSeg(TopRight,TopLeft);
-        topLine.decrement();
-
-        LineSeg thisLine = new LineSeg(this.begin, this.end);
-        thisLine.decrement();
-
-        //first check if the points of the line are in the rectangle
-        if (thisLine.getBegin().intersect(s) || thisLine.getEnd().intersect(s)){
-            return true;
-        }
-        
-        //check if the lines of rectangle intersect with line
-        if (leftLine.intersect(thisLine) || bottomLine.intersect(thisLine) || rightLine.intersect(thisLine) || topLine.intersect(thisLine)){
-            return true;
-        }
-        return false;
+        //find if they intersect 
+        return s.intersect(this);
     }
 
     public boolean intersect(Circle s){
         //check if LineSeg and circle intersect
-        Point center = s.getCenter();
-        double cx = center.getX();
-        double cy = center.getY();
-
-        Point p1 = this.begin;
-        Point p2 = this.end;
-
-        double x1 = p1.getX();
-        double y1 = p1.getY();
-        double x2 = p2.getX();
-        double y2 = p2.getY();
-
-        double[] lineV = {x2 - x1, y2 - y1};
-        double[] p1centerV = {cx - x1, cy - y1};
-
-        double p1centerOntoLine = (lineV[0] * p1centerV[0] + lineV[1] * p1centerV[1]) / (lineV[0] * lineV[0] + lineV[1] * lineV[1]);
-        //if < 0 p1 is closest
-        //if > 1 p2 is closest
-        //if in between the closest point is somewhere between the line end points
-
-        double px;
-        double py;
-        if (p1centerOntoLine < 0){
-            px = x1;
-            py = y1;
-        } else if (p1centerOntoLine > 1){
-            px = x2;
-            py = y2;
-        }else{
-            px = x1 + p1centerOntoLine * (x2 - x1);
-            py = y1 + p1centerOntoLine * (y2 - y1);
-        }
-
-        double PCdistance = Math.sqrt(Math.pow(px - cx,2) + Math.pow(py - cy,2));
-
-        //for if a float gets cut off 
-        //0.0000001 is 1e-7
-        if (PCdistance - s.getRadius() < 1e-7){
-            return true;
-        }
-        return false;
+        return s.intersect(this);
     }
 }

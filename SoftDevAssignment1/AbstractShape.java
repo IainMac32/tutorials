@@ -12,6 +12,7 @@ public abstract class AbstractShape {
         numberOfInstances ++;
     }
 
+    //we need this to decrement when we make a shape in a method to allow reusing methods
     public void decrement(){
         numberOfInstances --;
     }

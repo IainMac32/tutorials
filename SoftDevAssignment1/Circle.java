@@ -5,6 +5,7 @@ public class Circle extends AbstractShape implements CollisionDetector {
     private float radius;
     private static int numberOfInstances;
 
+    //circle default to 0,0
     public Circle (){
         super();
         numberOfInstances ++;
@@ -32,6 +33,7 @@ public class Circle extends AbstractShape implements CollisionDetector {
         return numberOfInstances;
     }
 
+    //we need this decrement since we make circles to allow recalling methods
     public void decrement(){
         numberOfInstances --;
         super.decrement();
@@ -39,15 +41,7 @@ public class Circle extends AbstractShape implements CollisionDetector {
 
     public boolean intersect(Point s){
         //check if circle and point intersect
-        Point center = this.center;
-        double radius = this.radius;
-        
-        double distancePointCenter = Math.sqrt(Math.pow(s.getX() - center.getX(),2) + Math.pow(s.getY() - center.getY(),2));
-
-        if (distancePointCenter <= radius){
-            return true;
-        }
-        return false;
+        return s.intersect(this);
     }
 
     public boolean intersect(LineSeg s){
@@ -67,7 +61,8 @@ public class Circle extends AbstractShape implements CollisionDetector {
         double[] lineV = {x2 - x1, y2 - y1};
         double[] p1centerV = {cx - x1, cy - y1};
 
-        double p1centerOntoLine = (lineV[0] * p1centerV[0] + lineV[1] * p1centerV[1]) / (lineV[0] * lineV[0] + lineV[0] * lineV[0]);
+        //trying to find the closest point on the line to the circle
+        double p1centerOntoLine = (lineV[0] * p1centerV[0] + lineV[1] * p1centerV[1]) / (lineV[0] * lineV[0] + lineV[1] * lineV[1]);
         //if < 0 p1 is closest
         //if > 1 p2 is closest
         //if in between the closest point is somewhere between the line end points
@@ -85,6 +80,7 @@ public class Circle extends AbstractShape implements CollisionDetector {
             py = y1 + p1centerOntoLine * (y2 - y1);
         }
 
+        //find distance between closest point on line and circle center
         double PCdistance = Math.sqrt(Math.pow(px - cx,2) + Math.pow(py - cy,2));
 
         //for if a float gets cut off 
@@ -96,86 +92,8 @@ public class Circle extends AbstractShape implements CollisionDetector {
     }
 
     public boolean intersect(Rectangle s){
-
-        //find the top left bottom left top right bottom right
-        Point[] points = {s.getBottom(),s.getLeft(),s.getRight(),s.getTop()};
-
-        Point left1 = points[0];
-        Point left2 = null;
-        Point right1 = points[0];
-        Point right2 = null;
-
-        // Loop to find the two leftmost and two rightmost points
-        for (int i = 1; i < points.length; i++) {
-            Point p = points[i];
-
-            // Find two leftmost points
-            if (p.getX() < left1.getX()) {
-                left2 = left1;
-                left1 = p;
-            } else if (left2 == null || p.getX() < left2.getX()) {
-                left2 = p;
-            }
-
-            // Find two rightmost points
-            if (p.getX() > right1.getX()) {
-                right2 = right1;
-                right1 = p;
-            } else if (right2 == null || p.getX() > right2.getX()) {
-                right2 = p;
-            }
-        }
-
-        Point TopLeft;
-        Point TopRight;
-        Point BottomLeft;
-        Point BottomRight;
-
-        if (left1.getY() > left2.getY()) {
-            TopLeft = left1;  // Top-left
-            BottomLeft = left2;  // Bottom-left
-        } else {
-            TopLeft = left2;  // Top-left
-            BottomLeft = left1;  // Bottom-left
-        }
-
-        // Determine top-right and bottom-right
-        if (right1.getY() > right2.getY()) {
-            TopRight = right1;  // Top-right
-            BottomRight = right2;  // Bottom-right
-        } else {
-            TopRight = right2;  // Top-right
-            BottomRight = right1;  // Bottom-right
-        }
-
-
-        //check if circle and rectangle intersect
-        LineSeg leftLine = new LineSeg(TopLeft,BottomLeft);
-        leftLine.decrement();
-        LineSeg bottomLine = new LineSeg(BottomLeft,BottomRight);
-        bottomLine.decrement();
-        LineSeg rightLine = new LineSeg(BottomRight,TopRight);
-        rightLine.decrement();
-        LineSeg topLine = new LineSeg(TopRight,TopLeft);
-        topLine.decrement();
-
-        Rectangle thisRect = new Rectangle(s.getLeft(),s.getRight(),s.getTop(),s.getBottom());
-        thisRect.decrement();
-
-        Point center = this.center;
-        Circle thisCircle = new Circle(this.center,this.radius);
-        thisCircle.decrement();
-
-        //the circle could be completely in the rectangle so we check if the center is in the rectangle
-        if (center.intersect(thisRect)){
-            return true;
-        }
-
-        // the circle intersects with one of the lines
-        if (leftLine.intersect(thisCircle) || bottomLine.intersect(thisCircle) || rightLine.intersect(thisCircle) || topLine.intersect(thisCircle)){
-            return true;
-        }
-        return false;
+        //find if they intersect
+        return s.intersect(this);
     }
 
 
@@ -188,8 +106,10 @@ public class Circle extends AbstractShape implements CollisionDetector {
         double radius1 = this.radius;
         double radius2 = s.getRadius();
 
+        //get distance between centers
         double distanceCircle12 = Math.sqrt(Math.pow(center1.getX() - center2.getX(),2) + Math.pow(center1.getY() - center2.getY(),2));
 
+        //if the radius added up are greater than distance they intersect
         if (distanceCircle12 <= (radius1 + radius2)){
             return true;
         }

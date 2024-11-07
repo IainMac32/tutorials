@@ -80,7 +80,6 @@ public class Point extends AbstractShape implements CollisionDetector {
     public boolean intersect(Rectangle s){
         //check if point and rectangle intersect
 
-
         //find the top left bottom left top right bottom right
         Point[] points = {s.getBottom(),s.getLeft(),s.getRight(),s.getTop()};
 
@@ -165,8 +164,10 @@ public class Point extends AbstractShape implements CollisionDetector {
         Point center = s.getCenter();
         double radius = s.getRadius();
         
+        //find distance from point to center
         double distancePointCenter = Math.sqrt(Math.pow(this.x - center.getX(),2) + Math.pow(this.y - center.getY(),2));
 
+        //see if the radius is larger or equal to distance from center to point
         if (distancePointCenter <= radius){
             return true;
         }

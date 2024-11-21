@@ -1,4 +1,4 @@
-package SoftDevAssignment1;
+package SoftwareDevAssignment2;
 import java.lang.Math;
 
 public class Point extends AbstractShape implements CollisionDetector {
@@ -6,11 +6,8 @@ public class Point extends AbstractShape implements CollisionDetector {
     private float y;
     private static int numberOfInstances;
 
-    public Point(){
-        super();
-        numberOfInstances ++;
-        this.x = 0;
-        this.y = 0;
+    public Point() throws ShapeArgumentException {
+        throw new ShapeArgumentException("ShapeArgumentException in constructing Point");
     }
 
     public Point(float x, float y){

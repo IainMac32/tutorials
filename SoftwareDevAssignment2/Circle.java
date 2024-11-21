@@ -1,4 +1,4 @@
-package SoftDevAssignment1;
+package SoftwareDevAssignment2;
 
 public class Circle extends AbstractShape implements CollisionDetector {
     private Point center;
@@ -6,16 +6,15 @@ public class Circle extends AbstractShape implements CollisionDetector {
     private static int numberOfInstances;
 
     //circle default to 0,0
-    public Circle (){
-        super();
-        numberOfInstances ++;
-        this.center = new Point(0,0); //is this right?
-        this.center.decrement();
-        this.radius = 1;
+    public Circle () throws ShapeArgumentException {
+        throw new ShapeArgumentException("ShapeArgumentException in constructing Circle");
     }
 
-    public Circle(Point center, float radius){
+    public Circle(Point center, float radius) throws ShapeArgumentException {
         super();
+        if (radius <= 0){
+            throw new ShapeArgumentException("ShapeArgumentException in constructing Circle");
+        }
         numberOfInstances++;
         this.center = center;
         this.radius = radius;

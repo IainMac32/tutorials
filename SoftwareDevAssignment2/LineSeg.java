@@ -1,4 +1,4 @@
-package SoftDevAssignment1;
+package SoftwareDevAssignment2;
 
 public class LineSeg extends AbstractShape implements CollisionDetector {
     private Point begin;
@@ -7,17 +7,15 @@ public class LineSeg extends AbstractShape implements CollisionDetector {
     private static int numberOfInstances;
 
     //default line segment is just 0,0 to 0,1
-    public LineSeg(){
-        super();
-        numberOfInstances ++;
-        this.begin = new Point(0, 0);
-        this.begin.decrement();
-        this.end = new Point (0, 1);
-        this.end.decrement();
+    public LineSeg() throws ShapeArgumentException {
+        throw new ShapeArgumentException("ShapeArgumentException in constructing LineSeg");
     }
 
-    public LineSeg(Point b, Point e){
+    public LineSeg(Point b, Point e) throws ShapeArgumentException{
         super();
+        if (b.equals(e)){
+            throw new ShapeArgumentException("ShapeArgumentException in constructing LineSeg");
+        }
         numberOfInstances ++;
         this.begin = b;
         this.end = e;

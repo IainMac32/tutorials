@@ -1,4 +1,4 @@
-package SoftDevAssignment1;
+package SoftwareDevAssignment2;
 
 public interface CollisionDetector{
     boolean intersect(Point s);

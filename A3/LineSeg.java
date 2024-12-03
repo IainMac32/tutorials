@@ -1,4 +1,5 @@
-package SoftwareDevAssignment2;
+package A3;
+
 
 public class LineSeg extends AbstractShape implements CollisionDetector {
     private Point begin;
@@ -7,15 +8,12 @@ public class LineSeg extends AbstractShape implements CollisionDetector {
     private static int numberOfInstances;
 
     //default line segment is just 0,0 to 0,1
-    public LineSeg() throws ShapeArgumentException {
-        throw new ShapeArgumentException("ShapeArgumentException in constructing LineSeg");
+    public LineSeg()  {
+        System.out.println("ShapeArgumentException in constructing LineSeg");
     }
 
-    public LineSeg(Point b, Point e) throws ShapeArgumentException{
+    public LineSeg(Point b, Point e) {
         super();
-        if (b.equals(e)){
-            throw new ShapeArgumentException("ShapeArgumentException in constructing LineSeg");
-        }
         numberOfInstances ++;
         this.begin = b;
         this.end = e;
@@ -36,6 +34,10 @@ public class LineSeg extends AbstractShape implements CollisionDetector {
     public void decrement(){
         numberOfInstances --;
         super.decrement();
+    }
+
+    public boolean intersect(CompShape s){
+        return s.intersect(this);
     }
 
     public boolean intersect(Point s){

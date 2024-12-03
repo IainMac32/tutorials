@@ -1,4 +1,4 @@
-package SoftwareDevAssignment2;
+package A3;
 
 public abstract class AbstractShape {
     private static int numberOfInstances = 0;

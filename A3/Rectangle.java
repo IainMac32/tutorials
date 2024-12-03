@@ -1,6 +1,6 @@
-package SoftwareDevAssignment2;
+package A3;
 
-import static org.junit.jupiter.api.Assertions.fail;
+
 
 public class Rectangle extends AbstractShape implements CollisionDetector {
     private Point left;
@@ -10,15 +10,12 @@ public class Rectangle extends AbstractShape implements CollisionDetector {
 
     private static int numberOfInstances;
 
-    public Rectangle() throws ShapeArgumentException {
-        throw new ShapeArgumentException("ShapeArgumentException in constructing Rectangle");
+    public Rectangle() {
+        System.out.println("ShapeArgumentException in constructing Rectangle");
     }
 
-    public Rectangle(Point l, Point r, Point t, Point b) throws ShapeArgumentException { //bl, tl, br, tr
+    public Rectangle(Point l, Point r, Point t, Point b)  { //bl, tl, br, tr
         super();
-        if (l.getX() >= t.getX() || l.getX() >= b.getX() || r.getX() >= t.getX() || r.getX() >= b.getX() || l.getY() >= r.getY() || l.getY() >= b.getY() || t.getY() >= r.getY() || t.getY() >= b.getY()){
-            throw new ShapeArgumentException("ShapeArgumentException in constructing Rectangle");
-        }
         numberOfInstances++;
         this.left = l;
         this.right = r;
@@ -51,6 +48,10 @@ public class Rectangle extends AbstractShape implements CollisionDetector {
         super.decrement();
     }
 
+    public boolean intersect(CompShape s){
+        return s.intersect(this);
+    }
+
     public boolean intersect(Point s){
         //check if rectangle and point intersect
         return s.intersect(this);
@@ -76,33 +77,25 @@ public class Rectangle extends AbstractShape implements CollisionDetector {
 
 
         //deconstruct the rectangle into 4 lines
-        try{
-            leftLine = new LineSeg(TopLeft,BottomLeft);
-            leftLine.decrement();
-            bottomLine = new LineSeg(BottomLeft,BottomRight);
-            bottomLine.decrement();
-            rightLine = new LineSeg(BottomRight,TopRight);
-            rightLine.decrement();
-            topLine = new LineSeg(TopRight,TopLeft);
-            topLine.decrement();
-        } catch (ShapeArgumentException e) {
-        fail("Unexpected exception: " + e.getMessage());
-        }
+        leftLine = new LineSeg(TopLeft,BottomLeft);
+        leftLine.decrement();
+        bottomLine = new LineSeg(BottomLeft,BottomRight);
+        bottomLine.decrement();
+        rightLine = new LineSeg(BottomRight,TopRight);
+        rightLine.decrement();
+        topLine = new LineSeg(TopRight,TopLeft);
+        topLine.decrement();
 
 
         LineSeg thisLine = null;
         Rectangle thisRect = null;
-        try{
-            //get the line we are working with. I know I don't need this but its better for readability
-            thisLine = new LineSeg(s.getBegin(), s.getEnd());
-            thisLine.decrement();
+        //get the line we are working with. I know I don't need this but its better for readability
+        thisLine = new LineSeg(s.getBegin(), s.getEnd());
+        thisLine.decrement();
 
-            thisRect = this;
-                //bl, tl, br, tr
-                //Point l, Point r, Point t, Point b
-        } catch (ShapeArgumentException e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+        thisRect = this;
+            //bl, tl, br, tr
+            //Point l, Point r, Point t, Point b
 
 
         //first check if the points of the line are in the rectangle
@@ -133,19 +126,15 @@ public class Rectangle extends AbstractShape implements CollisionDetector {
         LineSeg rightLine = null;
         LineSeg topLine = null;
 
-        try{
-            //deconstruct one of the rectangles
-            leftLine = new LineSeg(TopLeft,BottomLeft);
-            leftLine.decrement();
-            bottomLine = new LineSeg(BottomLeft,BottomRight);
-            bottomLine.decrement();
-            rightLine = new LineSeg(BottomRight,TopRight);
-            rightLine.decrement();
-            topLine = new LineSeg(TopRight,TopLeft);
-            topLine.decrement();
-        } catch (ShapeArgumentException e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+        //deconstruct one of the rectangles
+        leftLine = new LineSeg(TopLeft,BottomLeft);
+        leftLine.decrement();
+        bottomLine = new LineSeg(BottomLeft,BottomRight);
+        bottomLine.decrement();
+        rightLine = new LineSeg(BottomRight,TopRight);
+        rightLine.decrement();
+        topLine = new LineSeg(TopRight,TopLeft);
+        topLine.decrement();
 
 
         Rectangle thisRect = null;
@@ -234,29 +223,22 @@ public class Rectangle extends AbstractShape implements CollisionDetector {
         LineSeg topLine = null;
 
 
-        try{
-            //deconstruct one of the rectangles
-            leftLine = new LineSeg(TopLeft,BottomLeft);
-            leftLine.decrement();
-            bottomLine = new LineSeg(BottomLeft,BottomRight);
-            bottomLine.decrement();
-            rightLine = new LineSeg(BottomRight,TopRight);
-            rightLine.decrement();
-            topLine = new LineSeg(TopRight,TopLeft);
-            topLine.decrement();
-        } catch (ShapeArgumentException e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+        //deconstruct one of the rectangles
+        leftLine = new LineSeg(TopLeft,BottomLeft);
+        leftLine.decrement();
+        bottomLine = new LineSeg(BottomLeft,BottomRight);
+        bottomLine.decrement();
+        rightLine = new LineSeg(BottomRight,TopRight);
+        rightLine.decrement();
+        topLine = new LineSeg(TopRight,TopLeft);
+        topLine.decrement();
 
 
         Rectangle thisRect = null;
-        try{
-            //get the rectangle we are working with
-            thisRect = new Rectangle(BottomLeft,TopLeft,BottomRight,TopRight);
-            thisRect.decrement();
-        } catch (ShapeArgumentException e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+
+        //get the rectangle we are working with
+        thisRect = new Rectangle(BottomLeft,TopLeft,BottomRight,TopRight);
+        thisRect.decrement();
 
         Point center = s.getCenter();
 

@@ -1,4 +1,4 @@
-package SoftwareDevAssignment2;
+package SoftDevAssignment2;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;

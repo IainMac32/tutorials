@@ -1,13 +1,14 @@
-package SoftwareDevAssignment2;
+package A3;
 import java.lang.Math;
+
 
 public class Point extends AbstractShape implements CollisionDetector {
     private float x;
     private float y;
     private static int numberOfInstances;
 
-    public Point() throws ShapeArgumentException {
-        throw new ShapeArgumentException("ShapeArgumentException in constructing Point");
+    public Point()  {
+        System.out.println("cannot make point");
     }
 
     public Point(float x, float y){
@@ -33,6 +34,10 @@ public class Point extends AbstractShape implements CollisionDetector {
     public void decrement(){
         numberOfInstances --;
         super.decrement();
+    }
+
+    public boolean intersect(CompShape s){
+        return s.intersect(this);
     }
 
     public boolean intersect(Point s){

@@ -1,8 +1,16 @@
-package SoftwareDevAssignment2;
+package SoftDevAssignment2;
+
+import A3.AbstractShape;
+import A3.Circle;
+import A3.CompShape;
+import A3.CompShapeIterator;
+import A3.Drawing;
+import A3.LineSeg;
+import A3.Point;
+import A3.Rectangle;
 
 public class Main {
   public static void main(String[] args) {
-    try{
     //I will create 10 test cases that will cover all the classes since I just recall
     //some methods inside other methods so there is 10 unique ones.
 
@@ -79,8 +87,65 @@ public class Main {
       Rectangle r2 = new Rectangle(p1_r2,p2_r2,p3_r2,p4_r2);
       boolean status_r2_intersects_r1 = r2.intersect(r1); // rect rect 10/10
       System.out.println(status_r2_intersects_r1);
-    } catch (ShapeArgumentException e) {
-        System.out.println("Error: " + e.getMessage());
-      } 
+
+      CompShape comp1 = new CompShape();
+      comp1.addShape(p1_r2); //0,0
+      comp1.addShape(p2_r2);
+      comp1.addShape(new Circle(new Point(100,100),5));
+
+      System.out.println("this is comp shapes:");
+      System.out.println(new Point(0,0).intersect(comp1));
+      System.out.println(new Point(5,0).intersect(comp1));
+      System.out.println(new Point(100,105).intersect(comp1));
+      System.out.println(comp1.intersect(new Point(100,105)));
+      System.out.println(new Point(100,106).intersect(comp1));
+
+
+
+
+
+
+
+
+
+      LineSeg l = new LineSeg(new Point(2,2), new Point(1,1));
+      Circle c = new Circle(new Point(7.1f, 0.4f), 3.3f);
+      Rectangle r = new Rectangle(new Point(0,0),new Point(0,1),new Point(1,0),new Point(1,1));
+      CompShape s = new CompShape();
+      s.addShape(l);
+      s.addShape(c);
+      s.addShape(r);
+      CompShape s2 = new CompShape();
+      s.removeShape(r);
+      s2.addShape(r);
+      s2.addShape(s);
+      //intersect
+      System.out.println("first");
+      System.out.println(s2.intersect(l));
+
+      System.out.println("second");
+      System.out.println(s2.intersect(c));
+
+      System.out.println("third");
+      System.out.println(s2.intersect(r));
+
+      System.out.println("forth");
+      System.out.println(s2.intersect(s));
+
+      //access components
+      CompShapeIterator it = new CompShapeIterator(s2);
+      it.first();
+      while(it.isDone())
+      {
+        AbstractShape shape = it.getCurrentShape();
+        System.out.println(shape);
+        it.next();
+      }
+      //singleton Drawing
+      Drawing dwg = Drawing.getInstance();
+      dwg.setShape(s2);
+      AbstractShape ds = dwg.getShape();
+
+
   }
 }
